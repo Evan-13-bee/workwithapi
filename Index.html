@@ -10,7 +10,10 @@
       <td>{{item.brewers}}</td>
       <td><button @click="deleteItem(item.name)">Delete</button></td>
       <td><button @click="item.typeOfEdit = !item.typeOfEdit">Edit</button></td>
-      <td v-if="item.typeOfEdit"><input @keyup.enter="item.typeOfEdit = false" v-model="item.name" type="text"></td>
+      <td v-if="item.typeOfEdit">
+        <input @keyup.enter="item.typeOfEdit = false" v-model="item.name" type="text">
+        <input @keyup.enter="item.typeOfEdit = false" v-model="item.description" type="text">
+      </td>
     </tr>
     </table>
     <button v-if='type' @click="nextPage">Show next</button>
@@ -80,6 +83,12 @@
 </script>
 
 <style>
+  div {
+    text-align: center;
+    width: 70%;
+  }
+
+
   table {
       border: 1px solid black;
       border-collapse: collapse;

@@ -8,8 +8,9 @@
       <td>{{item.description}}</td>
       <td><img :src="item.img" alt="img"></td>
       <td>{{item.brewers_tips}}</td>
-      <td><button>Edit</button></td>
-      <td><button @click="delete1(item.name)">Delete</button></td>
+      <td><button @click="deleteItem(item.name)">Delete</button></td>
+      <td><button @click="typeOfEdit = !typeOfEdit">Edit</button></td>
+      <td v-if="typeOfEdit"><input @keyup.enter="typeOfEdit = false" v-model="item.name" type="text"></td>
     </tr>
     </table>
     <button v-if='type' @click="nextPage">Show next</button>
@@ -18,6 +19,7 @@
   let app = new Vue({
   el: '#app',
   data: () => ({
+    typeOfEdit: false,
     type: true,
     one: '',
     two: 1,
@@ -26,7 +28,6 @@
 
   methods: {
     nextPage(){
-
       axios
       .get('https://api.punkapi.com/v2/beers?page=1&limit=25')
       .then(response => {
@@ -40,13 +41,16 @@
         
       })
       .finally(() => (this.two++));
+      console.log(this.list)
     },
-    delete1(name){
+    deleteItem(name){
       let index = this.list.findIndex(e => e.name == name)
       this.list.splice(index, 1)
     },
-    edit1(){
-
+    edit1(name){
+      let index = this.list.findIndex(e => e.name == name)
+      this.list[index].type2 = this.list[index].type2 == true ? false : true
+      this.list = this.list
     }
   },
 
@@ -61,7 +65,7 @@
       .catch(error => {
         
       })
-      .finally(() => (this.list[0].type = true));
+      .finally();
       
   }
 });

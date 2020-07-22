@@ -1,0 +1,87 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<div id="app">
+  <table>
+    <tr v-for="item in list">
+      <td>{{item.id}}</td>
+      <td>{{item.name}}</td>
+      <td>{{item.description}}</td>
+      <td><img :src="item.img" alt="img"></td>
+      <td>{{item.brewers_tips}}</td>
+    </tr>
+    </table>
+    <button v-if='type' @click="nextPage">Show next</button>
+</div>
+<script>
+  let app = new Vue({
+  el: '#app',
+  data: () => ({
+    type: true,
+    one: '',
+    two: 1,
+    list: []
+  }),
+
+  methods: {
+    nextPage(){
+      // this.list.find(e => e.id == this.two).type = true
+      // this.two++
+      axios
+      .get('https://api.punkapi.com/v2/beers?page=1&limit=25')
+      .then(response => {
+        this.one = response.data
+        // this.one.forEach(e => this.list.push({
+        //   id: e.id,
+        //   name: e.name,
+        //   img: e.img,
+        //   description: e.description,
+        //   brewers: e.brewers_tips,
+        //   type: false
+        // }))
+        this.list.push(response.data[this.two])
+        if(this.two == response.data.length-1){
+          this.type = false
+        }
+      })
+      .catch(error => {
+        
+      })
+      .finally(() => (this.two++));
+    }
+  },
+
+  mounted() {
+    axios
+      .get('https://api.punkapi.com/v2/beers?page=1&limit=25')
+      .then(response => {
+        this.one = response.data
+        console.log(this.one)
+        // this.one.forEach(e => this.list.push({
+        //   id: e.id,
+        //   name: e.name,
+        //   img: e.img,
+        //   description: e.description,
+        //   brewers: e.brewers_tips,
+        //   type: false
+        // }))
+        this.list.push(response.data[0])
+      })
+      .catch(error => {
+        
+      })
+      .finally(() => (this.list[0].type = true));
+      
+  }
+});
+</script>
+
+<style>
+  table {
+      border: 1px solid black;
+      border-collapse: collapse;
+  }
+
+  td {
+      border: 1px solid black;
+  }
+</style>

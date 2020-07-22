@@ -8,6 +8,8 @@
       <td>{{item.description}}</td>
       <td><img :src="item.img" alt="img"></td>
       <td>{{item.brewers_tips}}</td>
+      <td><button>Edit</button></td>
+      <td><button @click="delete1(item.name)">Delete</button></td>
     </tr>
     </table>
     <button v-if='type' @click="nextPage">Show next</button>
@@ -47,6 +49,10 @@
         
       })
       .finally(() => (this.two++));
+    },
+    delete1(name){
+      let index = this.list.findIndex(e => e.name == name)
+      this.list.splice(index, 1)
     }
   },
 

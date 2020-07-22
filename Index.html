@@ -26,20 +26,11 @@
 
   methods: {
     nextPage(){
-      // this.list.find(e => e.id == this.two).type = true
-      // this.two++
+
       axios
       .get('https://api.punkapi.com/v2/beers?page=1&limit=25')
       .then(response => {
         this.one = response.data
-        // this.one.forEach(e => this.list.push({
-        //   id: e.id,
-        //   name: e.name,
-        //   img: e.img,
-        //   description: e.description,
-        //   brewers: e.brewers_tips,
-        //   type: false
-        // }))
         this.list.push(response.data[this.two])
         if(this.two == response.data.length-1){
           this.type = false
@@ -53,6 +44,9 @@
     delete1(name){
       let index = this.list.findIndex(e => e.name == name)
       this.list.splice(index, 1)
+    },
+    edit1(){
+
     }
   },
 
@@ -62,14 +56,6 @@
       .then(response => {
         this.one = response.data
         console.log(this.one)
-        // this.one.forEach(e => this.list.push({
-        //   id: e.id,
-        //   name: e.name,
-        //   img: e.img,
-        //   description: e.description,
-        //   brewers: e.brewers_tips,
-        //   type: false
-        // }))
         this.list.push(response.data[0])
       })
       .catch(error => {

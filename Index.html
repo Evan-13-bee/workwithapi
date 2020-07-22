@@ -7,10 +7,10 @@
       <td>{{item.name}}</td>
       <td>{{item.description}}</td>
       <td><img :src="item.img" alt="img"></td>
-      <td>{{item.brewers_tips}}</td>
+      <td>{{item.brewers}}</td>
       <td><button @click="deleteItem(item.name)">Delete</button></td>
-      <td><button @click="typeOfEdit = !typeOfEdit">Edit</button></td>
-      <td v-if="typeOfEdit"><input @keyup.enter="typeOfEdit = false" v-model="item.name" type="text"></td>
+      <td><button @click="item.typeOfEdit = !item.typeOfEdit">Edit</button></td>
+      <td v-if="item.typeOfEdit"><input @keyup.enter="item.typeOfEdit = false" v-model="item.name" type="text"></td>
     </tr>
     </table>
     <button v-if='type' @click="nextPage">Show next</button>
@@ -19,7 +19,6 @@
   let app = new Vue({
   el: '#app',
   data: () => ({
-    typeOfEdit: false,
     type: true,
     one: '',
     two: 1,
@@ -31,8 +30,15 @@
       axios
       .get('https://api.punkapi.com/v2/beers?page=1&limit=25')
       .then(response => {
-        this.one = response.data
-        this.list.push(response.data[this.two])
+        this.one = response.data[this.two]
+        this.list.push({
+          id: this.one.id,
+          name: this.one.name,
+          description: this.one.description,
+          img: this.one.img,
+          brewers: this.one.brewers_tips,
+          typeOfEdit: false
+        })
         if(this.two == response.data.length-1){
           this.type = false
         }
@@ -46,11 +52,6 @@
     deleteItem(name){
       let index = this.list.findIndex(e => e.name == name)
       this.list.splice(index, 1)
-    },
-    edit1(name){
-      let index = this.list.findIndex(e => e.name == name)
-      this.list[index].type2 = this.list[index].type2 == true ? false : true
-      this.list = this.list
     }
   },
 
@@ -58,9 +59,16 @@
     axios
       .get('https://api.punkapi.com/v2/beers?page=1&limit=25')
       .then(response => {
-        this.one = response.data
+        this.one = response.data[0]
         console.log(this.one)
-        this.list.push(response.data[0])
+        this.list.push({
+          id: this.one.id,
+          name: this.one.name,
+          description: this.one.description,
+          img: this.one.img,
+          brewers: this.one.brewers_tips,
+          typeOfEdit: false
+        })
       })
       .catch(error => {
         
